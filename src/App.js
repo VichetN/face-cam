@@ -6,7 +6,7 @@ import { Camera } from 'react-cam';
 
 async function loadLabeledImages() {
 
-  const labels = ['Black Widow', 'Captain America', 'Captain Marvel', 'Hawkeye', 'Jim Rhodes', 'Thor', 'Tony Stark','Vichet']
+  const labels = ['Black Widow', 'Captain America', 'Captain Marvel', 'Hawkeye', 'Jim Rhodes', 'Thor', 'Tony Stark','Vichet','Sipou']
   return Promise.all(
     labels.map(async label => {
       const descriptions = []
