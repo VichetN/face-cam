@@ -53,7 +53,7 @@ function App() {
       if (canvasRef && canvasRef.current) {
         canvasRef.current.innerHTML = faceapi?.createCanvasFromMedia(videoRef.current);
         const displaySize = {
-          width: videoWidth,
+          width: videoWidth / 2,
           height: videoHeight 
         }
 
