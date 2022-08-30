@@ -54,7 +54,7 @@ function App() {
         canvasRef.current.innerHTML = faceapi?.createCanvasFromMedia(videoRef.current);
         const displaySize = {
           width: videoWidth,
-          height: videoHeight
+          height: videoHeight 
         }
 
         faceapi.matchDimensions(canvasRef.current, displaySize);
@@ -94,8 +94,8 @@ function App() {
       {
         captureVideo ?
           modelsLoaded ?
-            <div>
-              <div style={{ display: 'flex', justifyContent: 'center', padding: '10px' }}>
+            <>
+              <div style={{ display: 'flex', justifyContent: 'center', padding: '10px',overflow:'hidden',width:'100%',position:'relative' }}>
                 {/* <Camera
                   showFocus={true}
                   front={false}
@@ -110,7 +110,7 @@ function App() {
                 <video ref={videoRef} height={videoHeight} width={videoWidth} onPlay={handleVideoOnPlay} style={{ borderRadius: '10px' }} />
                 <canvas ref={canvasRef} style={{ position: 'absolute' }} />
               </div>
-            </div>
+            </>
             :
             <div>loading...</div>
           :
