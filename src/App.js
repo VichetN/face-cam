@@ -53,7 +53,7 @@ function App() {
       if (canvasRef && canvasRef.current) {
         canvasRef.current.innerHTML = faceapi?.createCanvasFromMedia(videoRef.current);
         const displaySize = {
-          width: videoWidth / 1.5,
+          width: videoWidth / 1.8,
           height: videoHeight 
         }
 
@@ -95,7 +95,7 @@ function App() {
         captureVideo ?
           modelsLoaded ?
             <>
-              <div style={{ display: 'flex', justifyContent: 'center', padding: '10px',overflow:'hidden',width:'100%',position:'relative' }}>
+              <div style={{ display: 'flex', justifyContent: 'center', overflow:'hidden',width:'100%',position:'relative' }}>
                 {/* <Camera
                   showFocus={true}
                   front={false}
