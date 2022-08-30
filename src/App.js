@@ -2,11 +2,10 @@ import './App.css';
 import React, { useEffect, useRef, useState } from "react";
 
 import * as faceapi from 'face-api.js';
-import { Camera } from 'react-cam';
 
 async function loadLabeledImages() {
 
-  const labels = ['Black Widow', 'Captain America', 'Captain Marvel', 'Hawkeye', 'Jim Rhodes', 'Thor', 'Tony Stark','Vichet','Sipou']
+  const labels = ['Black Widow', 'Captain America', 'Captain Marvel', 'Hawkeye', 'Jim Rhodes', 'Thor', 'Tony Stark','Vichet','Sipou','Seakly']
   return Promise.all(
     labels.map(async label => {
       const descriptions = []
@@ -47,9 +46,9 @@ function App() {
         setModelsLoaded(true)
 
         // const faceDescriptor = await loadLabeledImages();
-
+        // console.log(faceDescriptor,'des')
         // if (faceDescriptor) {
-        //   setFaces(faceDescriptor)
+        //   setFaces((prev) => [...faceDescriptor])
         // }
 
       });
@@ -59,15 +58,6 @@ function App() {
     loadModels();
 
   }, []);
-
-  const loadLabel = async () => {
-    const faceDescriptor = await loadLabeledImages();
-    const faces = await faceapi?.FaceMatcher(faceDescriptor, 0.6);
-
-    if (faceDescriptor) {
-      setFaces(faceDescriptor)
-    }
-  }
 
   // useEffect(() => {
   //   if (modelsLoaded) {
@@ -90,9 +80,11 @@ function App() {
   }
 
   const handleVideoOnPlay = async () => {
+    
     const faceDescriptor = await loadLabeledImages();
-    const faceMatcher = new faceapi.FaceMatcher(faceDescriptor, 0.6);
     setInterval(async () => {
+
+      const faceMatcher = new faceapi.FaceMatcher(faceDescriptor, 0.6);
       if (canvasRef && canvasRef.current) {
         canvasRef.current.innerHTML = faceapi?.createCanvasFromMedia(videoRef.current);
         const displaySize = {
@@ -105,10 +97,7 @@ function App() {
         const detections = await faceapi.detectAllFaces(videoRef.current, new faceapi.TinyFaceDetectorOptions()).withFaceLandmarks().withFaceExpressions().withFaceDescriptors();
         const resizedDetections = faceapi.resizeResults(detections, displaySize);
 
-        // console.log(detections)
-
         const results = resizedDetections?.map(d => faceMatcher.findBestMatch(d.descriptor))
-        console.log(faceMatcher,'tes')
         results?.forEach((result, index) => {
           const box = resizedDetections[index].detection?.box
           const drawBox = new faceapi.draw.DrawBox(box, { label: result.toString() })
