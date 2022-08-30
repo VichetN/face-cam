@@ -20,11 +20,9 @@ async function loadLabeledImages() {
       return new faceapi.LabeledFaceDescriptors(label, descriptions)
     })
   )
-
 }
 
 function App() {
-
   const [modelsLoaded, setModelsLoaded] = useState(false);
   const [captureVideo, setCaptureVideo] = useState(false);
   const [faces, setFaces] = useState(null)
