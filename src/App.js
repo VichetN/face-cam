@@ -5,7 +5,7 @@ import * as faceapi from 'face-api.js';
 
 async function loadLabeledImages() {
 
-  const labels = ['Black Widow', 'Captain America', 'Captain Marvel', 'Hawkeye', 'Jim Rhodes', 'Thor', 'Tony Stark','Vichet','Sipou','Seakly']
+  const labels = ['Black Widow', 'Captain America', 'Captain Marvel', 'Hawkeye', 'Jim Rhodes', 'Thor', 'Tony Stark','Vichet','Sipou','Seakly','Channo']
   return Promise.all(
     labels.map(async label => {
       const descriptions = []
