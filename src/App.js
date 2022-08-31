@@ -124,6 +124,8 @@ function App() {
     <div className="App">
       <div style={{ textAlign: 'center', padding: '10px' }}>
         <h3>Detect your face</h3>
+            
+        {loading && <div>loading...</div>}
         {/* {
           captureVideo && modelsLoaded ?
             <button onClick={closeWebcam} style={{ cursor: 'pointer', backgroundColor: 'green', color: 'white', padding: '15px', fontSize: '25px', border: 'none', borderRadius: '10px' }}>
@@ -137,26 +139,15 @@ function App() {
       </div>
       {
         captureVideo ?
-          modelsLoaded || !loading ?
-            <>
+          // modelsLoaded ?
+          //   <>
               <div style={{ display: 'flex', justifyContent: 'center', overflow: 'hidden', width: '100%', position: 'relative' }}>
-                {/* <Camera
-                  showFocus={true}
-                  front={false}
-                  capture={capture}
-                  ref={videoRef}
-                  width="80%"
-                  height="auto"
-                  focusWidth="80%"
-                  focusHeight="60%"
-                  btnColor="white"
-                /> */}
                 <video ref={videoRef} playsInline height={videoHeight} width={videoWidth} onPlay={handleVideoOnPlay} style={{ borderRadius: '10px' }} />
                 <canvas ref={canvasRef} style={{ position: 'absolute' }} />
               </div>
-            </>
-            :
-            <div>loading...</div>
+            // </>
+            // :
+            // <div>loading...</div>
           :
           <>
           </>
