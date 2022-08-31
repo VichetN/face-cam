@@ -86,7 +86,7 @@ function App() {
     setLoading(false)
     setInterval(async () => {
 
-      const faceMatcher = new faceapi.FaceMatcher(faceDescriptor, 0.8);
+      const faceMatcher = new faceapi.FaceMatcher(faceDescriptor, 0.7);
       if (canvasRef && canvasRef.current) {
         canvasRef.current.innerHTML = faceapi?.createCanvasFromMedia(videoRef.current);
         const displaySize = {
