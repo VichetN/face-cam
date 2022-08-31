@@ -5,7 +5,7 @@ import * as faceapi from 'face-api.js';
 
 async function loadLabeledImages() {
 
-  const labels = ['Black Widow', 'Captain America', 'Captain Marvel', 'Hawkeye', 'Jim Rhodes', 'Thor', 'Tony Stark','Vichet','Sipou','Seakly','Channo']
+  const labels = ['Black Widow', 'Captain America', 'Captain Marvel', 'Hawkeye', 'Jim Rhodes', 'Thor', 'Tony Stark', 'Vichet', 'Sipou', 'Seakly', 'Channo']
   return Promise.all(
     labels.map(async label => {
       const descriptions = []
@@ -24,7 +24,6 @@ async function loadLabeledImages() {
 function App() {
   const [modelsLoaded, setModelsLoaded] = useState(false);
   const [captureVideo, setCaptureVideo] = useState(false);
-  const [faces, setFaces] = useState(null)
 
   const videoRef = useRef();
   const videoHeight = 480;
@@ -44,26 +43,12 @@ function App() {
         faceapi.nets.ssdMobilenetv1.loadFromUri(MODEL_URL),
       ]).then(async () => {
         setModelsLoaded(true)
-
-        // const faceDescriptor = await loadLabeledImages();
-        // console.log(faceDescriptor,'des')
-        // if (faceDescriptor) {
-        //   setFaces((prev) => [...faceDescriptor])
-        // }
-
       });
     }
-
 
     loadModels();
 
   }, []);
-
-  // useEffect(() => {
-  //   if (modelsLoaded) {
-  //     loadLabel()
-  //   }
-  // }, [loadLabel, modelsLoaded]);
 
   const startVideo = () => {
     setCaptureVideo(true);
@@ -80,7 +65,7 @@ function App() {
   }
 
   const handleVideoOnPlay = async () => {
-    
+
     const faceDescriptor = await loadLabeledImages();
     setInterval(async () => {
 
@@ -149,7 +134,7 @@ function App() {
                   focusHeight="60%"
                   btnColor="white"
                 /> */}
-                <video ref={videoRef} height={videoHeight} width={videoWidth} onPlay={handleVideoOnPlay} style={{ borderRadius: '10px' }} />
+                <video ref={videoRef} playsinline height={videoHeight} width={videoWidth} onPlay={handleVideoOnPlay} style={{ borderRadius: '10px' }} />
                 <canvas ref={canvasRef} style={{ position: 'absolute' }} />
               </div>
             </>
