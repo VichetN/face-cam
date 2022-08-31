@@ -5,7 +5,7 @@ import * as faceapi from 'face-api.js';
 
 async function loadLabeledImages() {
 //'Black Widow', 'Captain America', 'Captain Marvel', 'Hawkeye', 'Jim Rhodes', 'Thor', 'Tony Stark', 
-  const labels = ['Vichet', 'Sipou', 'Seakly', 'Channo']
+  const labels = ['Vichet', 'Sipou', 'Seakly', 'Channo', 'Saden','Thyratha']
   return Promise.all(
     labels.map(async label => {
       const descriptions = []
@@ -96,7 +96,6 @@ function App() {
         faceapi.matchDimensions(canvasRef.current, displaySize);
 
         const detections = await faceapi.detectAllFaces(videoRef.current, new faceapi.TinyFaceDetectorOptions()).withFaceLandmarks().withFaceExpressions().withFaceDescriptors();
-        console.log(detections)
         const resizedDetections = faceapi.resizeResults(detections, displaySize);
 
         const results = resizedDetections?.map(d => faceMatcher.findBestMatch(d.descriptor))
