@@ -4,8 +4,8 @@ import React, { useEffect, useRef, useState } from "react";
 import * as faceapi from 'face-api.js';
 
 async function loadLabeledImages() {
-//'Black Widow', 'Captain America', 'Captain Marvel', 'Hawkeye', 'Jim Rhodes', 'Thor', 'Tony Stark', 
-  const labels = ['Vichet', 'Sipou', 'Seakly', 'Channo', 'Saden','Thyratha']
+  //'Black Widow', 'Captain America', 'Captain Marvel', 'Hawkeye', 'Jim Rhodes', 'Thor', 'Tony Stark', 
+  const labels = ['Vichet', 'Sipou', 'Seakly', 'Channo', 'Saden', 'Thyratha']
   return Promise.all(
     labels.map(async label => {
       const descriptions = []
@@ -25,6 +25,7 @@ function App() {
   const [modelsLoaded, setModelsLoaded] = useState(false);
   const [captureVideo, setCaptureVideo] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [detectedData, setDetectedData] = useState(null);
 
   const videoRef = useRef();
   const videoHeight = 480;
@@ -100,6 +101,8 @@ function App() {
 
         const results = resizedDetections?.map(d => faceMatcher.findBestMatch(d.descriptor))
         results?.forEach((result, index) => {
+          console.log({...resizedDetections[index],label:result.toString()})
+          setDetectedData({...resizedDetections[index],label:result.toString()})
           const box = resizedDetections[index].detection?.box
           const drawBox = new faceapi.draw.DrawBox(box, { label: `${result.toString()}` })
           drawBox?.draw(canvasRef.current)
@@ -120,11 +123,21 @@ function App() {
   //   setCaptureVideo(false);
   // }
 
+  const getExpression = (expression) => {
+    if (expression) {
+      const vals = Object.values(expression);
+      const max = Math?.max(...vals);
+      // const min = Math.min(...vals);
+      return Object.keys(expression).find(key => expression[key] === max);
+      // console.log(max)
+    }
+  }
+
   return (
     <div className="App">
       <div style={{ textAlign: 'center', padding: '10px' }}>
         <h3>Detect your face</h3>
-            
+
         {loading && <div>loading...</div>}
         {/* {
           captureVideo && modelsLoaded ?
@@ -141,17 +154,23 @@ function App() {
         captureVideo ?
           // modelsLoaded ?
           //   <>
-              <div className='video-container'>
-                <video ref={videoRef} playsInline height={videoHeight} width={videoWidth} onPlay={handleVideoOnPlay} className='video-display' />
-                <canvas ref={canvasRef} className='mark-canvas' />
-              </div>
-            // </>
-            // :
-            // <div>loading...</div>
+          <div className='video-container'>
+            <video ref={videoRef} playsInline height={videoHeight} width={videoWidth} onPlay={handleVideoOnPlay} className='video-display' />
+            <canvas ref={canvasRef} className='mark-canvas' />
+          </div>
+          // </>
+          // :
+          // <div>loading...</div>
           :
           <>
           </>
       }
+      <div>
+        <h3>{detectedData?.label}</h3>
+        <h3>{detectedData?.detection?.score}</h3>
+        <p>{getExpression(detectedData?.expressions)}</p>
+
+      </div>
     </div>
   );
 }
