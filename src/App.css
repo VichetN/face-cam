@@ -3,3 +3,18 @@
   overflow: hidden;
 }
 
+.video-container{
+  display: flex;
+  justify-content: center;
+  overflow: hidden; 
+  width: '100%';
+  position:relative;
+}
+.video-display{
+    border-radius: 10px;
+    transform: rotateY(180deg);
+    -webkit-transform:rotateY(180deg); /* Safari and Chrome */
+    -moz-transform:rotateY(180deg); /* Firefox */
+}
+
+

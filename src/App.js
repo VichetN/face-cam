@@ -141,8 +141,8 @@ function App() {
         captureVideo ?
           // modelsLoaded ?
           //   <>
-              <div style={{ display: 'flex', justifyContent: 'center', overflow: 'hidden', width: '100%', position: 'relative' }}>
-                <video ref={videoRef} playsInline height={videoHeight} width={videoWidth} onPlay={handleVideoOnPlay} style={{ borderRadius: '10px' }} />
+              <div className='video-container'>
+                <video ref={videoRef} playsInline height={videoHeight} width={videoWidth} onPlay={handleVideoOnPlay} className='video-display' />
                 <canvas ref={canvasRef} style={{ position: 'absolute' }} />
               </div>
             // </>
