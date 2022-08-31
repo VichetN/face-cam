@@ -50,18 +50,32 @@ function App() {
 
   }, []);
 
+  useEffect(() => {
+    const getUserMedia = async () => {
+      try {
+        setCaptureVideo(true)
+        const stream = await navigator.mediaDevices.getUserMedia({ video: { width: 300 } });
+        videoRef.current.srcObject = stream;
+        videoRef.current.play();
+      } catch (err) {
+        console.log(err);
+      }
+    };
+    getUserMedia();
+  }, []);
+
   const startVideo = () => {
-    setCaptureVideo(true);
-    navigator.mediaDevices
-      .getUserMedia({ video: { width: 300 } })
-      .then(stream => {
-        let video = videoRef.current;
-        video.srcObject = stream;
-        video.play();
-      })
-      .catch(err => {
-        console.error("error:", err);
-      });
+    // setCaptureVideo(true);
+    // navigator.mediaDevices
+    //   .getUserMedia({ video: { width: 300 } })
+    //   .then(stream => {
+    //     let video = videoRef.current;
+    //     video.srcObject = stream;
+    //     video.play();
+    //   })
+    //   .catch(err => {
+    //     console.error("error:", err);
+    //   });
   }
 
   const handleVideoOnPlay = async () => {
@@ -134,7 +148,7 @@ function App() {
                   focusHeight="60%"
                   btnColor="white"
                 /> */}
-                <video ref={videoRef} playsinline height={videoHeight} width={videoWidth} onPlay={handleVideoOnPlay} style={{ borderRadius: '10px' }} />
+                <video ref={videoRef} playsInline height={videoHeight} width={videoWidth} onPlay={handleVideoOnPlay} style={{ borderRadius: '10px' }} />
                 <canvas ref={canvasRef} style={{ position: 'absolute' }} />
               </div>
             </>
