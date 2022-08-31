@@ -96,12 +96,13 @@ function App() {
         faceapi.matchDimensions(canvasRef.current, displaySize);
 
         const detections = await faceapi.detectAllFaces(videoRef.current, new faceapi.TinyFaceDetectorOptions()).withFaceLandmarks().withFaceExpressions().withFaceDescriptors();
+        console.log(detections)
         const resizedDetections = faceapi.resizeResults(detections, displaySize);
 
         const results = resizedDetections?.map(d => faceMatcher.findBestMatch(d.descriptor))
         results?.forEach((result, index) => {
           const box = resizedDetections[index].detection?.box
-          const drawBox = new faceapi.draw.DrawBox(box, { label: result.toString() })
+          const drawBox = new faceapi.draw.DrawBox(box, { label: `${result.toString()}` })
           drawBox?.draw(canvasRef.current)
         })
 
