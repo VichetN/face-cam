@@ -17,4 +17,8 @@
     -moz-transform:rotateY(180deg); /* Firefox */
 }
 
+.mark-canvas{
+  position: absolute;
+}
+
 

@@ -143,7 +143,7 @@ function App() {
           //   <>
               <div className='video-container'>
                 <video ref={videoRef} playsInline height={videoHeight} width={videoWidth} onPlay={handleVideoOnPlay} className='video-display' />
-                <canvas ref={canvasRef} style={{ position: 'absolute' }} />
+                <canvas ref={canvasRef} className='mark-canvas' />
               </div>
             // </>
             // :
