@@ -24,6 +24,7 @@ async function loadLabeledImages() {
 function App() {
   const [modelsLoaded, setModelsLoaded] = useState(false);
   const [captureVideo, setCaptureVideo] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   const videoRef = useRef();
   const videoHeight = 480;
@@ -81,6 +82,7 @@ function App() {
   const handleVideoOnPlay = async () => {
 
     const faceDescriptor = await loadLabeledImages();
+    setLoading(false)
     setInterval(async () => {
 
       const faceMatcher = new faceapi.FaceMatcher(faceDescriptor, 0.6);
@@ -112,16 +114,17 @@ function App() {
     }, 100)
   }
 
-  const closeWebcam = () => {
-    videoRef.current.pause();
-    videoRef.current.srcObject.getTracks()[0].stop();
-    setCaptureVideo(false);
-  }
+  // const closeWebcam = () => {
+  //   videoRef.current.pause();
+  //   videoRef.current.srcObject.getTracks()[0].stop();
+  //   setCaptureVideo(false);
+  // }
 
   return (
     <div className="App">
       <div style={{ textAlign: 'center', padding: '10px' }}>
-        {
+        <h3>Detect your face</h3>
+        {/* {
           captureVideo && modelsLoaded ?
             <button onClick={closeWebcam} style={{ cursor: 'pointer', backgroundColor: 'green', color: 'white', padding: '15px', fontSize: '25px', border: 'none', borderRadius: '10px' }}>
               Close Webcam
@@ -130,11 +133,11 @@ function App() {
             <button onClick={startVideo} style={{ cursor: 'pointer', backgroundColor: 'green', color: 'white', padding: '15px', fontSize: '25px', border: 'none', borderRadius: '10px' }}>
               Open Webcam
             </button>
-        }
+        } */}
       </div>
       {
         captureVideo ?
-          modelsLoaded ?
+          modelsLoaded || !loading ?
             <>
               <div style={{ display: 'flex', justifyContent: 'center', overflow: 'hidden', width: '100%', position: 'relative' }}>
                 {/* <Camera
