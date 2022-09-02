@@ -5,7 +5,7 @@ import * as faceapi from 'face-api.js';
 
 async function loadLabeledImages() {
   //'Black Widow', 'Captain America', 'Captain Marvel', 'Hawkeye', 'Jim Rhodes', 'Thor', 'Tony Stark', 
-  const labels = ['Vichet','Seakly', 'Channo', 'Saden', 'Thyratha']//'Vichet',  
+  const labels = ['Vichet', 'Seakly', 'Channo', 'Saden', 'Thyratha']//'Vichet',  
   return Promise.all(
     labels.map(async label => {
       const descriptions = []
@@ -46,7 +46,7 @@ function App() {
         faceapi.nets.faceExpressionNet.loadFromUri(MODEL_URL),
       ]).then(async () => {
         setModelsLoaded(true)
-      }).catch(e=>{
+      }).catch(e => {
         console.log(e)
       })
     }
@@ -106,11 +106,11 @@ function App() {
 
         const results = resizedDetections?.map(d => faceMatcher.findBestMatch(d.descriptor))
         results?.forEach((result, index) => {
-          setDetectedData({...resizedDetections[index],result:result})
+          setDetectedData({ ...resizedDetections[index], result: result })
           const box = resizedDetections[index].detection?.box
 
-          const drawBox = new faceapi.draw.DrawBox(box, { label: `${result?.label.toString()}`,boxColor:'yellow',lineWidth:2 })
-          
+          const drawBox = new faceapi.draw.DrawBox(box, { label: `${result?.label.toString()}`, boxColor: 'yellow', lineWidth: 2 })
+
           drawBox?.draw(ctx)
         })
 
@@ -122,6 +122,12 @@ function App() {
       }
     }, 100)
   }
+
+  useEffect(() => {
+    if (modelsLoaded) {
+      handleVideoOnPlay()
+    }
+  }, [modelsLoaded])
 
   // const closeWebcam = () => {
   //   videoRef.current.pause();
@@ -161,7 +167,7 @@ function App() {
           // modelsLoaded ?
           //   <>
           <div className='video-container'>
-            <video ref={videoRef} playsInline height={videoHeight} width={videoWidth} onPlay={handleVideoOnPlay} className='video-display' />
+            <video ref={videoRef} playsInline height={videoHeight} width={videoWidth} className='video-display' />
             <canvas ref={canvasRef} className='mark-canvas' />
           </div>
           // </>
