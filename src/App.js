@@ -36,7 +36,7 @@ function App() {
 
     const loadModels = async () => {
       // process.env.PUBLIC_URL +
-      const MODEL_URL = './models';
+      const MODEL_URL = process.env.PUBLIC_URL + './models';
 
       await Promise.all([
         faceapi.nets.ssdMobilenetv1.loadFromUri(MODEL_URL),
@@ -118,8 +118,7 @@ function App() {
         // canvasRef && canvasRef.current && faceapi.draw.drawDetections(canvasRef.current, resizedDetections);
 
         // canvasRef && canvasRef.current && faceapi.draw.drawFaceLandmarks(canvasRef.current, resizedDetections);
-        canvasRef && canvasRef.current && faceapi.draw.drawFaceExpressions(canvasRef.current, resizedDetections);
-        canvasRef && canvasRef.current && faceapi.draw.drawContour(canvasRef.current, resizedDetections);
+        // canvasRef && canvasRef.current && faceapi.draw.drawFaceExpressions(canvasRef.current, resizedDetections);
       }
     }, 100)
   }
