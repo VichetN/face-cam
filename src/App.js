@@ -36,7 +36,7 @@ function App() {
 
     const loadModels = async () => {
       // process.env.PUBLIC_URL +
-      const MODEL_URL = process.env.PUBLIC_URL + './models';
+      const MODEL_URL = './models';
 
       await Promise.all([
         faceapi.nets.ssdMobilenetv1.loadFromUri(MODEL_URL),
@@ -83,7 +83,7 @@ function App() {
     //   });
   }
 
-  const handleVideoOnPlay = async () => {
+  const handleDetectFace = async () => {
 
     const faceDescriptor = await loadLabeledImages();
     setLoading(false)
@@ -117,15 +117,16 @@ function App() {
         // canvasRef && canvasRef.current && canvasRef.current.getContext('2d').clearRect(0, 0, videoWidth, videoHeight);
         // canvasRef && canvasRef.current && faceapi.draw.drawDetections(canvasRef.current, resizedDetections);
 
-        canvasRef && canvasRef.current && faceapi.draw.drawFaceLandmarks(canvasRef.current, resizedDetections);
-        // canvasRef && canvasRef.current && faceapi.draw.drawFaceExpressions(canvasRef.current, resizedDetections);
+        // canvasRef && canvasRef.current && faceapi.draw.drawFaceLandmarks(canvasRef.current, resizedDetections);
+        canvasRef && canvasRef.current && faceapi.draw.drawFaceExpressions(canvasRef.current, resizedDetections);
+        canvasRef && canvasRef.current && faceapi.draw.drawContour(canvasRef.current, resizedDetections);
       }
     }, 100)
   }
 
   useEffect(() => {
     if (modelsLoaded) {
-      handleVideoOnPlay()
+      handleDetectFace()
     }
   }, [modelsLoaded])
 
