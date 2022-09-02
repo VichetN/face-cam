@@ -35,7 +35,8 @@ function App() {
   useEffect(() => {
 
     const loadModels = async () => {
-      const MODEL_URL = process.env.PUBLIC_URL + '/models';
+      // process.env.PUBLIC_URL +
+      const MODEL_URL = './models';
 
       Promise.all([
         faceapi.nets.tinyFaceDetector.loadFromUri(MODEL_URL),
@@ -45,7 +46,7 @@ function App() {
         faceapi.nets.ssdMobilenetv1.loadFromUri(MODEL_URL),
       ]).then(async () => {
         setModelsLoaded(true)
-      });
+      }).catch(e=>console.log(e))
     }
 
     loadModels();
