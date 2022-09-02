@@ -5,7 +5,7 @@ import * as faceapi from 'face-api.js';
 
 async function loadLabeledImages() {
   //'Black Widow', 'Captain America', 'Captain Marvel', 'Hawkeye', 'Jim Rhodes', 'Thor', 'Tony Stark', 
-  const labels = ['Vichet',]//'Vichet',  'Seakly', 'Channo', 'Saden', 'Thyratha'
+  const labels = ['Vichet','Seakly', 'Channo', 'Saden', 'Thyratha']//'Vichet',  
   return Promise.all(
     labels.map(async label => {
       const descriptions = []
@@ -106,9 +106,7 @@ function App() {
           setDetectedData({...resizedDetections[index],result:result})
           const box = resizedDetections[index].detection?.box
 
-          console.log(result)
-
-          const drawBox = new faceapi.draw.DrawBox(box, { label: `${result?._label.toString()}`,boxColor:'yellow' })
+          const drawBox = new faceapi.draw.DrawBox(box, { label: `${result?.label.toString()}`,boxColor:'yellow',lineWidth:2 })
           
           drawBox?.draw(ctx)
         })
