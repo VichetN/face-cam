@@ -5,7 +5,7 @@ import * as faceapi from 'face-api.js';
 
 async function loadLabeledImages() {
   //'Black Widow', 'Captain America', 'Captain Marvel', 'Hawkeye', 'Jim Rhodes', 'Thor', 'Tony Stark', 
-  const labels = ['Vichet', 'Sipou', 'Seakly', 'Channo', 'Saden', 'Thyratha']
+  const labels = ['Vichet',]//'Vichet',  'Seakly', 'Channo', 'Saden', 'Thyratha'
   return Promise.all(
     labels.map(async label => {
       const descriptions = []
@@ -86,7 +86,7 @@ function App() {
     setLoading(false)
     setInterval(async () => {
 
-      const faceMatcher = new faceapi.FaceMatcher(faceDescriptor, 0.6);
+      const faceMatcher = new faceapi.FaceMatcher(faceDescriptor, 0.5);
       if (canvasRef && canvasRef.current) {
         canvasRef.current.innerHTML = faceapi?.createCanvasFromMedia(videoRef.current);
         const displaySize = {
@@ -99,13 +99,18 @@ function App() {
         const detections = await faceapi.detectAllFaces(videoRef.current, new faceapi.TinyFaceDetectorOptions()).withFaceLandmarks().withFaceExpressions().withFaceDescriptors();
         const resizedDetections = faceapi.resizeResults(detections, displaySize);
 
+        const ctx = canvasRef.current.getContext('2d')
+
         const results = resizedDetections?.map(d => faceMatcher.findBestMatch(d.descriptor))
         results?.forEach((result, index) => {
-          console.log({...resizedDetections[index],label:result.toString()})
-          setDetectedData({...resizedDetections[index],label:result.toString()})
+          setDetectedData({...resizedDetections[index],result:result})
           const box = resizedDetections[index].detection?.box
-          const drawBox = new faceapi.draw.DrawBox(box, { label: `${result.toString()}` })
-          drawBox?.draw(canvasRef.current)
+
+          console.log(result)
+
+          const drawBox = new faceapi.draw.DrawBox(box, { label: `${result?._label.toString()}`,boxColor:'yellow' })
+          
+          drawBox?.draw(ctx)
         })
 
         // canvasRef && canvasRef.current && canvasRef.current.getContext('2d').clearRect(0, 0, videoWidth, videoHeight);
@@ -166,8 +171,8 @@ function App() {
           </>
       }
       <div>
-        <h3>{detectedData?.label}</h3>
-        <h3>{detectedData?.detection?.score}</h3>
+        <h3>{detectedData?.result?.label}</h3>
+        <h3>{detectedData?.result?.distance}</h3>
         <p>{getExpression(detectedData?.expressions)}</p>
 
       </div>
