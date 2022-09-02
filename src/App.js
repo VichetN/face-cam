@@ -36,17 +36,19 @@ function App() {
 
     const loadModels = async () => {
       // process.env.PUBLIC_URL +
-      const MODEL_URL = './models';
+      const MODEL_URL = process.env.PUBLIC_URL + './models';
 
-      Promise.all([
+      await Promise.all([
+        faceapi.nets.ssdMobilenetv1.loadFromUri(MODEL_URL),
         faceapi.nets.tinyFaceDetector.loadFromUri(MODEL_URL),
         faceapi.nets.faceLandmark68Net.loadFromUri(MODEL_URL),
         faceapi.nets.faceRecognitionNet.loadFromUri(MODEL_URL),
         faceapi.nets.faceExpressionNet.loadFromUri(MODEL_URL),
-        faceapi.nets.ssdMobilenetv1.loadFromUri(MODEL_URL),
       ]).then(async () => {
         setModelsLoaded(true)
-      }).catch(e=>console.log(e))
+      }).catch(e=>{
+        console.log(e)
+      })
     }
 
     loadModels();
