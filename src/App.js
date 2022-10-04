@@ -75,13 +75,17 @@ function App() {
               }
             </Route>
             <Route path='/success'>
-                <Route index element={<Pages.SuccessPage />} />
+              <Route index element={<Pages.SuccessPage />} />
             </Route>
           </Routes>
         </Router>
-        <button onClick={handleLogout}>
-          Logout
-        </button>
+        
+        {
+          loginToken ? <button onClick={handleLogout} className="btn-logout">
+            Logout
+          </button> : null
+        }
+
       </ApolloProvider>
     </div>
   );
