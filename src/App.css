@@ -1,27 +1,12 @@
 .App {
   text-align: center;
   overflow: hidden;
-}
-
-.video-container{
   display: flex;
+  flex-direction: column;
+  align-items: center;
   justify-content: center;
-  overflow: hidden; 
-  width: '100%';
-  position:relative;
-}
-.video-display{
-    border-radius: 10px;
-    transform: rotateY(180deg);
-    -webkit-transform:rotateY(180deg); 
-    -moz-transform:rotateY(180deg); 
 }
 
-.mark-canvas{
-  position: absolute;
-  transform: rotateY(180deg);
-    -webkit-transform:rotateY(180deg); 
-    -moz-transform:rotateY(180deg); 
-}
+
 
 
