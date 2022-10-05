@@ -67,7 +67,7 @@ function FaceDetectionPage() {
     setCaptureVideo(false);
   }
 
-  const [attendanceCheck, { loading: loadingCheck }] = useMutation(ATTENDANCE_CHECK, {
+  const [attendanceCheck, { loading: loadingCheck, data:dataCheck }] = useMutation(ATTENDANCE_CHECK, {
     onCompleted: ({ attendanceCheck }) => {
       if (attendanceCheck?.status === true) {
         navigate("/success");
@@ -136,8 +136,12 @@ function FaceDetectionPage() {
 
     const faceDescriptor = await loadLabeledImages(data?.getUserLogin);
     setLoading(false)
-    setInterval(async () => {
-
+    var scanInterval = setInterval(async () => {
+      if(dataCheck?.attendanceCheck?.status === true){
+        closeWebcam()
+        clearInterval(scanInterval)
+        return
+      }
       const faceMatcher = new faceapi.FaceMatcher(faceDescriptor, 0.5);
       if (canvasRef && canvasRef.current && !loadingCheck) {
         canvasRef.current.innerHTML = faceapi?.createCanvasFromMedia(videoRef.current);
