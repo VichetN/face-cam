@@ -59,8 +59,6 @@ function FaceDetectionPage() {
 
   const { data } = useQuery(GET_USERLOGIN)
 
-  console.log(data)
-
   const closeWebcam = () => {
     videoRef.current.pause();
     videoRef.current.srcObject.getTracks()[0].stop();
@@ -70,7 +68,7 @@ function FaceDetectionPage() {
   const [attendanceCheck, { loading: loadingCheck, data:dataCheck }] = useMutation(ATTENDANCE_CHECK, {
     onCompleted: ({ attendanceCheck }) => {
       if (attendanceCheck?.status === true) {
-        navigate("/success");
+        navigate("/success",{replace:true});
       }
     }
   })
