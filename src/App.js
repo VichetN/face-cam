@@ -9,12 +9,13 @@ import { signOut } from 'firebase/auth';
 
 function App() {
 
-  const endpointURI = "192.168.2.105:4008/graphql";
+  // const endpointURI = "192.168.2.105:4008/graphql";
+  const endpointURI = "employee-sm-school.herokuapp.com/graphql";
 
   const [loginToken, setLoginToken] = useState(null)
 
   const httpLink = new HttpLink({
-    uri: `http://${endpointURI}`
+    uri: `https://${endpointURI}`
   })
 
   const authLink = setContext((_, { headers }) => {

@@ -59,6 +59,8 @@ function FaceDetectionPage() {
 
   const { data } = useQuery(GET_USERLOGIN)
 
+  console.log(data)
+
   const closeWebcam = () => {
     videoRef.current.pause();
     videoRef.current.srcObject.getTracks()[0].stop();
@@ -171,10 +173,11 @@ function FaceDetectionPage() {
   }
 
   useEffect(() => {
-    if (modelsLoaded) {
+    if (modelsLoaded && data?.getUserLogin) {
+      
       handleDetectFace()
     }
-  }, [modelsLoaded])
+  }, [modelsLoaded, data?.getUserLogin])
 
   const getExpression = (expression) => {
     if (expression) {
