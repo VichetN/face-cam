@@ -136,7 +136,6 @@ function FaceDetectionPage() {
     setLoading(false)
     var scanInterval = setInterval(async () => {
       if(dataCheck?.attendanceCheck?.status === true){
-        closeWebcam()
         clearInterval(scanInterval)
         return
       }
