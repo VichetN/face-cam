@@ -70,6 +70,8 @@ function FaceDetectionPage() {
       console.log(attendanceCheck)
       if (attendanceCheck?.status === true) {
         navigate("/success",{replace:true});
+      }else{
+        navigate("/error",{replace:true});
       }
     }
   })
@@ -137,6 +139,7 @@ function FaceDetectionPage() {
     setLoading(false)
     var scanInterval = setInterval(async () => {
       if(dataCheck?.attendanceCheck?.status === true){
+        closeWebcam()
         clearInterval(scanInterval)
         return
       }

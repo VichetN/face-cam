@@ -78,6 +78,9 @@ function App() {
             <Route path='/success'>
               <Route index element={<Pages.SuccessPage />} />
             </Route>
+            <Route path='/error'>
+              <Route index element={<Pages.ErrorPage />} />
+            </Route>
           </Routes>
         </Router>
         
