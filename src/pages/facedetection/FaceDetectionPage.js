@@ -67,6 +67,7 @@ function FaceDetectionPage() {
 
   const [attendanceCheck, { loading: loadingCheck, data:dataCheck }] = useMutation(ATTENDANCE_CHECK, {
     onCompleted: ({ attendanceCheck }) => {
+      console.log(attendanceCheck)
       if (attendanceCheck?.status === true) {
         navigate("/success",{replace:true});
       }
