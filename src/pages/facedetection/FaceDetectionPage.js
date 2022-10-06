@@ -108,7 +108,7 @@ function FaceDetectionPage() {
   }, [setDetectedCount, detectedData])
 
   useEffect(() => {
-    if (detectedCount === 10) {
+    if (detectedCount === 3) {
       
       attendanceCheck({
         variables: {
