@@ -10,7 +10,8 @@ import { signOut } from 'firebase/auth';
 function App() {
 
   // const endpointURI = "192.168.2.105:4008/graphql";
-  const endpointURI = "employee-sm-school.herokuapp.com/graphql";
+  // const endpointURI = "employee-sm-school.herokuapp.com/graphql";
+  const endpointURI = "employee-endpoint.cci-cambodia.com/graphql";
 
   const [loginToken, setLoginToken] = useState(null)
 
