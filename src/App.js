@@ -71,7 +71,7 @@ function App() {
           <Routes>
             <Route path='/:id'>
               { loginToken ?
-                <Route index element={<Pages.FaceDetectionPage />} />
+                <Route index element={<Pages.FaceDetectionPage handleLogout={handleLogout}/>} />
                 :
                 <Route index element={<Pages.Login />} />
               }
@@ -85,11 +85,11 @@ function App() {
           </Routes>
         </Router>
         
-        {
+        {/* {
           loginToken ? <button onClick={handleLogout} className="btn-logout">
             Logout
           </button> : null
-        }
+        } */}
 
       </ApolloProvider>
     </div>

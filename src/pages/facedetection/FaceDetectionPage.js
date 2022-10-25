@@ -1,6 +1,7 @@
 import "./styles.css";
 import React, { useEffect, useRef, useState } from "react";
 
+import IconBack from "../../assets/arrow-small-left.png";
 import * as faceapi from "face-api.js";
 import { useMutation, useQuery } from "@apollo/client";
 import { GET_USERLOGIN } from "../../graphql/login";
@@ -54,7 +55,8 @@ async function loadLabeledImages(user) {
   );
 }
 
-function FaceDetectionPage() {
+function FaceDetectionPage({handleLogout}) {
+  // 
   const [modelsLoaded, setModelsLoaded] = useState(false);
   const [captureVideo, setCaptureVideo] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -279,26 +281,62 @@ function FaceDetectionPage() {
   };
 
   if (!isGeolocationAvailable) {
-    return <div>Your browser does not support Geolocation</div>;
+    return (
+      <div className="login-page">
+        <div className="container">
+          <div>Your browser does not support Geolocation</div>
+        </div>
+      </div>
+    );
   }
 
   if (!isGeolocationEnabled) {
-    return <div>Geolocation is not enabled</div>;
+    return (
+      <div className="login-page">
+        <div className="container">
+          <div>Geolocation is not enabled</div>
+        </div>
+      </div>
+    );
   }
 
   if (loadingCheck) {
-    return <p>Loading create</p>;
+    return (
+      <div className="login-page">
+        <div className="container">
+          <p>Loading create</p>
+        </div>
+      </div>
+    );
   }
 
   return (
     <div className="login-page">
         <div className="container">
           <div style={{ textAlign: "center", padding: "10px" }}>
-            <h3>Detect your face</h3>
+            
+            <div className="face-header-text">
+              <div className="header-text">
+                  <button className="btn-back-logout" onClick={handleLogout}>
+                    <img src={IconBack} alt="icon-back" width={40} />  
+                  </button>             
+              </div>              
+            </div>
+            
+            <div className="face-header-text">
+              <div className="header-text">
+                <h3 className="face-title">Welcome { data?.getUserLogin?.first_name +" "+ data?.getUserLogin?.last_name } !</h3>                
+              </div>              
+            </div>
+            <div className="face-header-text">
+              <div className="header-text">               
+                <p className="face-title-body">Please detect your face to get attendance.</p>
+              </div>              
+            </div>     
+                 
+            { longDistand > 20 && <div> <p style={{color:"#fff"}}>You are stay {longDistand} meter from a limited location to scan!</p></div>}
 
-            { longDistand > 20 && <div>You are stay {longDistand} meter from a limited location to scan!</div>}
-
-            { loading && longDistand < 20 && <div>loading...</div>}
+            { loading && longDistand < 20 && <div> <p style={{color:"#fff"}}>Loading...</p></div>}
             {/* {
               captureVideo && modelsLoaded ?
                 <button onClick={closeWebcam} style={{ cursor: 'pointer', backgroundColor: 'green', color: 'white', padding: '15px', fontSize: '25px', border: 'none', borderRadius: '10px' }}>
@@ -335,6 +373,9 @@ function FaceDetectionPage() {
             <p>{getExpression(detectedData?.expressions)}</p>
           </div> */}
         </div>
+
+        <h6 className='footer-text'>@Copyright 2022, Employee Record</h6>
+        
     </div>
   );
 }
