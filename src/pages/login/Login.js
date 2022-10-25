@@ -1,5 +1,5 @@
 import React from 'react';
-import Logo from '../../assets/cci-logo.png';
+import Logo from '../../assets/logoLogin.svg';
 import "./styles.css";
 
 import {
@@ -34,18 +34,25 @@ function Login() {
     }
 
     return (
-        <div className='container'>
-            <img src={Logo} width={60} />
-            <form className='form' onSubmit={onSubmit}>
-                <h2>LOGIN</h2>
-                <label>Email</label>
-                <input type={"text"} value={email} onChange={(e) => setEmail(e.target.value)} name="cci-email" className='form-control' autoComplete='off' />
-                <label>Password</label>
-                <input type={"password"} value={password} onChange={(e) => setPassword(e.target.value)} name="cci-password" className='form-control' autoComplete='off' />
-                <br />
-                <button className='btn-login'>LOGIN</button>
-                <br />
-            </form>
+        <div className="login-page">
+            <div className="background-image"></div>
+            <div className='container'>
+                <div className="box-logo">
+                    <img src={Logo} alt="logo" width={90} />
+                </div>               
+                <form className='form' onSubmit={onSubmit}>
+                    <h5 className='text-title'>Welcome to Employee Record</h5>                   
+                    <label>Email</label>
+                    <input type={"text"} value={email} onChange={(e) => setEmail(e.target.value)} name="cci-email" className='form-control' autoComplete='off' placeholder='example@user.com'/>
+                    <label>Password</label>
+                    <input type={"password"} value={password} onChange={(e) => setPassword(e.target.value)} name="cci-password" className='form-control' autoComplete='off' placeholder='********'/>
+                    <br />
+                    <button className='btn-login'>LOGIN</button>
+                    <br />
+                </form>                
+            </div>
+            
+            <h6 className='footer-text'>@Copyright 2022, Employee Record</h6>        
         </div>
     )
 }

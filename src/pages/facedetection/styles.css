@@ -4,17 +4,18 @@
     overflow: hidden; 
     width: '100%';
     position:relative;
-  }
-  .video-display{
-      border-radius: 10px;
-      transform: rotateY(180deg);
-      -webkit-transform:rotateY(180deg); 
-      -moz-transform:rotateY(180deg); 
-  }
-  
-  .mark-canvas{
-    position: absolute;
+}
+
+.video-display{
+    border-radius: 10px;
     transform: rotateY(180deg);
-      -webkit-transform:rotateY(180deg); 
-      -moz-transform:rotateY(180deg); 
-  }
+    -webkit-transform:rotateY(180deg); 
+    -moz-transform:rotateY(180deg); 
+}
+  
+.mark-canvas{
+  position: absolute;
+  transform: rotateY(180deg);
+    -webkit-transform:rotateY(180deg); 
+    -moz-transform:rotateY(180deg); 
+}

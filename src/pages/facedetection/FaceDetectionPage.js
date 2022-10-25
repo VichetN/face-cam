@@ -291,47 +291,50 @@ function FaceDetectionPage() {
   }
 
   return (
-    <div className="container">
-      <div style={{ textAlign: "center", padding: "10px" }}>
-        <h3>Detect your face</h3>
+    <div className="login-page">
+        <div className="container">
+          <div style={{ textAlign: "center", padding: "10px" }}>
+            <h3>Detect your face</h3>
 
-        { longDistand > 20 && <div>You are stay {longDistand} meter from a limited location to scan!</div>}
+            { longDistand > 20 && <div>You are stay {longDistand} meter from a limited location to scan!</div>}
 
-        { loading && longDistand < 20 && <div>loading...</div>}
-        {/* {
-          captureVideo && modelsLoaded ?
-            <button onClick={closeWebcam} style={{ cursor: 'pointer', backgroundColor: 'green', color: 'white', padding: '15px', fontSize: '25px', border: 'none', borderRadius: '10px' }}>
-              Close Webcam
-            </button>
-            :
-            <button onClick={startVideo} style={{ cursor: 'pointer', backgroundColor: 'green', color: 'white', padding: '15px', fontSize: '25px', border: 'none', borderRadius: '10px' }}>
-              Open Webcam
-            </button>
-        } */}
-      </div>
+            { loading && longDistand < 20 && <div>loading...</div>}
+            {/* {
+              captureVideo && modelsLoaded ?
+                <button onClick={closeWebcam} style={{ cursor: 'pointer', backgroundColor: 'green', color: 'white', padding: '15px', fontSize: '25px', border: 'none', borderRadius: '10px' }}>
+                  Close Webcam
+                </button>
+                :
+                <button onClick={startVideo} style={{ cursor: 'pointer', backgroundColor: 'green', color: 'white', padding: '15px', fontSize: '25px', border: 'none', borderRadius: '10px' }}>
+                  Open Webcam
+                </button>
+            } */}
+          </div>
 
-      { captureVideo ? (
-        // modelsLoaded ?
-        //   <>
-        <div className="video-container">
-          <video
-            ref={videoRef}
-            playsInline
-            height={videoHeight}
-            width={videoWidth}
-            className="video-display"
-          />
-          <canvas ref={canvasRef} className="mark-canvas" />
+          { captureVideo ? (
+            // modelsLoaded ?
+            //   <>
+            <div className="video-container">
+              <video
+                ref={videoRef}
+                playsInline
+                height={videoHeight}
+                width={videoWidth}
+                className="video-display"
+              />
+              <canvas ref={canvasRef} className="mark-canvas" />
+            </div>
+          ) : (       
+            <div>loading...</div>        
+          ) }
+
+          {/* <div>
+            <h3>{detectedData?.result?.label}</h3>
+            <h3>{detectedData?.result?.distance * 100}</h3>
+            <h3>{detectedData?.detection?.score * 100}</h3>
+            <p>{getExpression(detectedData?.expressions)}</p>
+          </div> */}
         </div>
-      ) : (       
-        <div>loading...</div>        
-      )}
-      {/* <div>
-        <h3>{detectedData?.result?.label}</h3>
-        <h3>{detectedData?.result?.distance * 100}</h3>
-        <h3>{detectedData?.detection?.score * 100}</h3>
-        <p>{getExpression(detectedData?.expressions)}</p>
-      </div> */}
     </div>
   );
 }
