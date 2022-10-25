@@ -308,7 +308,7 @@ function FaceDetectionPage() {
         } */}
       </div>
 
-      {captureVideo ? (
+      { captureVideo && loading === false ? (
         // modelsLoaded ?
         //   <>
         <div className="video-container">
