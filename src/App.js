@@ -70,7 +70,7 @@ function App() {
         <Router>
           <Routes>
             <Route path='/:id'>
-              {loginToken ?
+              { loginToken ?
                 <Route index element={<Pages.FaceDetectionPage />} />
                 :
                 <Route index element={<Pages.Login />} />

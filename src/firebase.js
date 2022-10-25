@@ -6,12 +6,12 @@ import { getStorage } from "firebase/storage";
 // See: https://firebase.google.com/docs/web/learn-more#config-object
 
 const firebaseConfig = {
-  apiKey: "AIzaSyBuwB53w4ZdIn15DpBOBeXvfv7hInbz0Ro",
-  authDomain: "employee-management-25c3a.firebaseapp.com",
-  projectId: "employee-management-25c3a",
-  storageBucket: "employee-management-25c3a.appspot.com",
-  messagingSenderId: "340117931202",
-  appId: "1:340117931202:web:e50287022b41c8e3a3a75b",
+  apiKey: "AIzaSyCKoVGykRCHWMZb56-Jvid1B8Et34IB2tU",
+  authDomain: "cci-employee-record.firebaseapp.com",
+  projectId: "cci-employee-record",
+  storageBucket: "cci-employee-record.appspot.com",
+  messagingSenderId: "802351842468",
+  appId: "1:802351842468:web:860abf63f13bd893cf5231"
 };
 
 // Initialize Firebase

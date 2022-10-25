@@ -1,15 +1,20 @@
-import './styles.css';
+import "./styles.css";
 import React, { useEffect, useRef, useState } from "react";
 
-import * as faceapi from 'face-api.js';
-import { useMutation, useQuery } from '@apollo/client';
-import { GET_USERLOGIN } from '../../graphql/login';
-import { ATTENDANCE_CHECK } from '../../graphql/attendance';
-import { useNavigate } from 'react-router-dom';
+import * as faceapi from "face-api.js";
+import { useMutation, useQuery } from "@apollo/client";
+import { GET_USERLOGIN } from "../../graphql/login";
+import { ATTENDANCE_CHECK } from "../../graphql/attendance";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
+
+//
+import { getDistance, getPreciseDistance, isPointWithinRadius } from "geolib";
+import { useGeolocated } from "react-geolocated";
+import { GET_BRANCH_BYID } from "../../graphql/branch";
 
 // async function loadLabeledImages(user) {
-//   //'Black Widow', 'Captain America', 'Captain Marvel', 'Hawkeye', 'Jim Rhodes', 'Thor', 'Tony Stark', 
-//   const labels = ['Vichet', 'Seakly', 'Channo', 'Saden', 'Thyratha']//'Vichet',  
+//   //'Black Widow', 'Captain America', 'Captain Marvel', 'Hawkeye', 'Jim Rhodes', 'Thor', 'Tony Stark',
+//   const labels = ['Vichet', 'Seakly', 'Channo', 'Saden', 'Thyratha']//'Vichet',
 //   return Promise.all(
 //     labels.map(async label => {
 //       const descriptions = []
@@ -26,21 +31,27 @@ import { useNavigate } from 'react-router-dom';
 // }
 
 async function loadLabeledImages(user) {
-  const stringUser = JSON.stringify({ userId: user?._id, src: user?.image?.src })
-  const labels = [`${stringUser}`]//'Vichet',  
-  console.log(labels)
+  const stringUser = JSON.stringify({
+    userId: user?._id,
+    src: user?.image?.src,
+  });
+  const labels = [`${stringUser}`]; //'Vichet',
+  console.log(labels);
   return Promise.all(
-    labels.map(async label => {
+    labels.map(async (label) => {
       const descriptions = [];
       const getUser = JSON.parse(label);
       // const img = await faceapi.fetchImage(`https://raw.githubusercontent.com/WebDevSimplified/Face-Recognition-JavaScript/master/labeled_images/${label}/${i}.jpg`)
-      const img = await faceapi.fetchImage(`${getUser?.src}`)
-      const detections = await faceapi.detectSingleFace(img).withFaceLandmarks().withFaceDescriptor()
-      descriptions.push(detections.descriptor)
+      const img = await faceapi.fetchImage(`${getUser?.src}`);
+      const detections = await faceapi
+        .detectSingleFace(img)
+        .withFaceLandmarks()
+        .withFaceDescriptor();
+      descriptions.push(detections.descriptor);
 
-      return new faceapi.LabeledFaceDescriptors(label, descriptions)
+      return new faceapi.LabeledFaceDescriptors(label, descriptions);
     })
-  )
+  );
 }
 
 function FaceDetectionPage() {
@@ -57,30 +68,31 @@ function FaceDetectionPage() {
 
   const navigate = useNavigate();
 
-  const { data } = useQuery(GET_USERLOGIN)
+  const { data } = useQuery(GET_USERLOGIN);
 
   const closeWebcam = () => {
     videoRef.current.pause();
     videoRef.current.srcObject.getTracks()[0].stop();
     setCaptureVideo(false);
-  }
+  };
 
-  const [attendanceCheck, { loading: loadingCheck, data:dataCheck }] = useMutation(ATTENDANCE_CHECK, {
-    onCompleted: ({ attendanceCheck }) => {
-      console.log(attendanceCheck)
-      if (attendanceCheck?.status === true) {
-        navigate("/success",{replace:true});
-      }else{
-        navigate("/error",{replace:true});
-      }
-    }
-  })
+  const [attendanceCheck, { loading: loadingCheck, data: dataCheck }] =
+    useMutation(ATTENDANCE_CHECK, {
+      onCompleted: ({ attendanceCheck }) => {
+        console.log(attendanceCheck);
+        if (attendanceCheck?.status === true) {
+          navigate("/success", { replace: true });
+        } else {
+          navigate("/error", { replace: true });
+        }
+      },
+    });
 
   useEffect(() => {
     setDetectedCount(0);
     const loadModels = async () => {
       // process.env.PUBLIC_URL +
-      const MODEL_URL = process.env.PUBLIC_URL + './models';
+      const MODEL_URL = process.env.PUBLIC_URL + "./models";
 
       await Promise.all([
         faceapi.nets.ssdMobilenetv1.loadFromUri(MODEL_URL),
@@ -88,41 +100,50 @@ function FaceDetectionPage() {
         faceapi.nets.faceLandmark68Net.loadFromUri(MODEL_URL),
         faceapi.nets.faceRecognitionNet.loadFromUri(MODEL_URL),
         faceapi.nets.faceExpressionNet.loadFromUri(MODEL_URL),
-      ]).then(async () => {
-        setModelsLoaded(true)
-      }).catch(e => {
-        console.log(e)
-      })
-    }
+      ])
+        .then(async () => {
+          setModelsLoaded(true);
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+    };
 
     loadModels();
-
   }, []);
 
   useEffect(() => {
-    const user = JSON?.parse(detectedData?.result?.label && detectedData?.result?.label !== "unknown" ? detectedData?.result?.label : null);
+    const user = JSON?.parse(
+      detectedData?.result?.label && detectedData?.result?.label !== "unknown"
+        ? detectedData?.result?.label
+        : null
+    );
     const detection = detectedData?.detection;
-    if (detection?.score * 100 >= 90 && user?.userId === data?.getUserLogin?._id) {
-      setDetectedCount(prev => prev += 1)
+    if (
+      detection?.score * 100 >= 90 &&
+      user?.userId === data?.getUserLogin?._id
+    ) {
+      setDetectedCount((prev) => (prev += 1));
     }
-  }, [setDetectedCount, detectedData])
+  }, [setDetectedCount, detectedData]);
 
   useEffect(() => {
     if (detectedCount === 3) {
-      
       attendanceCheck({
         variables: {
-          employeeId: data?.getUserLogin?._id
-        }
-      })
+          employeeId: data?.getUserLogin?._id,
+        },
+      });
     }
-  }, [detectedCount])
+  }, [detectedCount]);
 
   useEffect(() => {
     const getUserMedia = async () => {
       try {
-        setCaptureVideo(true)
-        const stream = await navigator.mediaDevices.getUserMedia({ video: { width: 300 } });
+        setCaptureVideo(true);
+        const stream = await navigator.mediaDevices.getUserMedia({
+          video: { width: 300 },
+        });
         videoRef.current.srcObject = stream;
         videoRef.current.play();
       } catch (err) {
@@ -132,41 +153,57 @@ function FaceDetectionPage() {
     getUserMedia();
   }, []);
 
-
   const handleDetectFace = async () => {
-
     const faceDescriptor = await loadLabeledImages(data?.getUserLogin);
-    setLoading(false)
+    setLoading(false);
     var scanInterval = setInterval(async () => {
-      if(dataCheck?.attendanceCheck?.status === true){
-        closeWebcam()
-        clearInterval(scanInterval)
-        return
+      if (dataCheck?.attendanceCheck?.status === true) {
+        closeWebcam();
+        clearInterval(scanInterval);
+        return;
       }
       const faceMatcher = new faceapi.FaceMatcher(faceDescriptor, 0.5);
       if (canvasRef && canvasRef.current && !loadingCheck) {
-        canvasRef.current.innerHTML = faceapi?.createCanvasFromMedia(videoRef.current);
+        canvasRef.current.innerHTML = faceapi?.createCanvasFromMedia(
+          videoRef.current
+        );
         const displaySize = {
           width: videoWidth / 1.9,
-          height: videoHeight
-        }
+          height: videoHeight,
+        };
 
         faceapi.matchDimensions(canvasRef.current, displaySize);
 
-        const detections = await faceapi.detectAllFaces(videoRef.current, new faceapi.TinyFaceDetectorOptions()).withFaceLandmarks().withFaceExpressions().withFaceDescriptors();
-        const resizedDetections = faceapi.resizeResults(detections, displaySize);
+        const detections = await faceapi
+          .detectAllFaces(
+            videoRef.current,
+            new faceapi.TinyFaceDetectorOptions()
+          )
+          .withFaceLandmarks()
+          .withFaceExpressions()
+          .withFaceDescriptors();
+        const resizedDetections = faceapi.resizeResults(
+          detections,
+          displaySize
+        );
 
-        const ctx = canvasRef?.current?.getContext('2d')
+        const ctx = canvasRef?.current?.getContext("2d");
 
-        const results = resizedDetections?.map(d => faceMatcher.findBestMatch(d.descriptor))
+        const results = resizedDetections?.map((d) =>
+          faceMatcher.findBestMatch(d.descriptor)
+        );
         results?.forEach((result, index) => {
-          setDetectedData({ ...resizedDetections[index], result: result })
-          const box = resizedDetections[index].detection?.box
+          setDetectedData({ ...resizedDetections[index], result: result });
+          const box = resizedDetections[index].detection?.box;
 
-          const drawBox = new faceapi.draw.DrawBox(box, { label: `${result?.label.toString()}`, boxColor: 'yellow', lineWidth: 2 })
+          const drawBox = new faceapi.draw.DrawBox(box, {
+            label: `${result?.label.toString()}`,
+            boxColor: "yellow",
+            lineWidth: 2,
+          });
 
-          drawBox?.draw(ctx)
-        })
+          drawBox?.draw(ctx);
+        });
 
         // canvasRef && canvasRef.current && canvasRef.current.getContext('2d').clearRect(0, 0, videoWidth, videoHeight);
         // canvasRef && canvasRef.current && faceapi.draw.drawDetections(canvasRef.current, resizedDetections);
@@ -174,37 +211,83 @@ function FaceDetectionPage() {
         // canvasRef && canvasRef.current && faceapi.draw.drawFaceLandmarks(canvasRef.current, resizedDetections);
         // canvasRef && canvasRef.current && faceapi.draw.drawFaceExpressions(canvasRef.current, resizedDetections);
       }
-    }, 100)
-  }
+    }, 100);
+  };
+
+  // User Location ==========================================================
+  const { coords, isGeolocationAvailable, isGeolocationEnabled } =
+    useGeolocated({
+      positionOptions: {
+        enableHighAccuracy: false,
+      },
+      userDecisionTimeout: 5000,
+    });
+
+  // Branch Location =========================================================
+  const { id } = useParams();
+  const { data: dataBranch, refetch: refetchBranch } = useQuery(
+    GET_BRANCH_BYID,
+    {
+      variables: {
+        id: id,
+      },
+      onCompleted: ({ getBranchById }) => {
+        console.log(getBranchById);
+      },
+    }
+  );
+
+  const hanleCheckLocation = () => {
+    // console.log(coords)
+    const distance = getDistance(
+      { latitude: coords?.latitude, longitude: coords?.longitude },
+      {
+        latitude: parseFloat(dataBranch?.getBranchById?.latitude),
+        longitude: parseFloat(dataBranch?.getBranchById?.longitude),
+      },
+      // 50
+      // { latitude: 13.3564631 , longitude: 103.8332306 }
+    );
+    alert(distance);
+    console.log(distance);
+  };
 
   useEffect(() => {
-    if (modelsLoaded && data?.getUserLogin) {
-      
-      handleDetectFace()
+    if (modelsLoaded && data?.getUserLogin && coords) {
+      // handleDetectFace();
+      hanleCheckLocation();
     }
-  }, [modelsLoaded, data?.getUserLogin])
+  }, [modelsLoaded, data?.getUserLogin, dataBranch?.getBranchById]);
 
   const getExpression = (expression) => {
     if (expression) {
       const vals = Object.values(expression);
       const max = Math?.max(...vals);
       // const min = Math.min(...vals);
-      return Object.keys(expression).find(key => expression[key] === max);
+      return Object.keys(expression).find((key) => expression[key] === max);
       // console.log(max)
     }
+  };
+
+  if (!isGeolocationAvailable) {
+    return <div>Your browser does not support Geolocation</div>;
+  }
+
+  if (!isGeolocationEnabled) {
+    return <div>Geolocation is not enabled</div>;
   }
 
   if (loadingCheck) {
-
-    return <p>Loading create</p>
+    return <p>Loading create</p>;
   }
 
   return (
     <div className="container">
-      <div style={{ textAlign: 'center', padding: '10px' }}>
+      <div style={{ textAlign: "center", padding: "10px" }}>
         <h3>Detect your face</h3>
 
         {loading && <div>loading...</div>}
+
         {/* {
           captureVideo && modelsLoaded ?
             <button onClick={closeWebcam} style={{ cursor: 'pointer', backgroundColor: 'green', color: 'white', padding: '15px', fontSize: '25px', border: 'none', borderRadius: '10px' }}>
@@ -216,28 +299,31 @@ function FaceDetectionPage() {
             </button>
         } */}
       </div>
-      {
-        captureVideo ?
-          // modelsLoaded ?
-          //   <>
-          <div className='video-container'>
-            <video ref={videoRef} playsInline height={videoHeight} width={videoWidth} className='video-display' />
-            <canvas ref={canvasRef} className='mark-canvas' />
-          </div>
-          // </>
-          // :
-          // <div>loading...</div>
-          :
-          <>
-          </>
-      }
+      {captureVideo ? (
+        // modelsLoaded ?
+        //   <>
+        <div className="video-container">
+          <video
+            ref={videoRef}
+            playsInline
+            height={videoHeight}
+            width={videoWidth}
+            className="video-display"
+          />
+          <canvas ref={canvasRef} className="mark-canvas" />
+        </div>
+      ) : (
+        // </>
+        // :
+        // <div>loading...</div>
+        <></>
+      )}
       {/* <div>
         <h3>{detectedData?.result?.label}</h3>
         <h3>{detectedData?.result?.distance * 100}</h3>
         <h3>{detectedData?.detection?.score * 100}</h3>
         <p>{getExpression(detectedData?.expressions)}</p>
       </div> */}
-
     </div>
   );
 }
