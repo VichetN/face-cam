@@ -157,6 +157,7 @@ function FaceDetectionPage() {
     const faceDescriptor = await loadLabeledImages(data?.getUserLogin);
     setLoading(false);
     var scanInterval = setInterval(async () => {
+      
       if (dataCheck?.attendanceCheck?.status === true) {
         closeWebcam();
         clearInterval(scanInterval);
@@ -294,10 +295,9 @@ function FaceDetectionPage() {
       <div style={{ textAlign: "center", padding: "10px" }}>
         <h3>Detect your face</h3>
 
-        {loading && <div>You are stay {longDistand} meter from a limited location to scan!</div>}
+        { longDistand > 20 && <div>You are stay {longDistand} meter from a limited location to scan!</div>}
 
-        {captureVideo === false && loading === false && <div>loading...</div>}
-
+        { loading && longDistand < 20 && <div>loading...</div>}
         {/* {
           captureVideo && modelsLoaded ?
             <button onClick={closeWebcam} style={{ cursor: 'pointer', backgroundColor: 'green', color: 'white', padding: '15px', fontSize: '25px', border: 'none', borderRadius: '10px' }}>
@@ -310,7 +310,7 @@ function FaceDetectionPage() {
         } */}
       </div>
 
-      { captureVideo && loading === false ? (
+      { captureVideo ? (
         // modelsLoaded ?
         //   <>
         <div className="video-container">
@@ -323,11 +323,8 @@ function FaceDetectionPage() {
           />
           <canvas ref={canvasRef} className="mark-canvas" />
         </div>
-      ) : (
-        // </>
-        // :
-        // <div>loading...</div>
-        <></>
+      ) : (       
+        <div>loading...</div>        
       )}
       {/* <div>
         <h3>{detectedData?.result?.label}</h3>
