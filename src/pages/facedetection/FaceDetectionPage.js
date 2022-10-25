@@ -218,7 +218,7 @@ function FaceDetectionPage() {
   const { coords, isGeolocationAvailable, isGeolocationEnabled } =
     useGeolocated({
       positionOptions: {
-        enableHighAccuracy: false,
+        enableHighAccuracy: true,
       },
       userDecisionTimeout: 5000,
     });
@@ -244,17 +244,23 @@ function FaceDetectionPage() {
       {
         latitude: parseFloat(dataBranch?.getBranchById?.latitude),
         longitude: parseFloat(dataBranch?.getBranchById?.longitude),
-      },
-      // 50
+      }
+      // 100
       // { latitude: 13.3564631 , longitude: 103.8332306 }
     );
-    alert(distance);
+
     console.log(distance);
+
+    if (distance < 100) {
+      handleDetectFace();
+    } else {
+      alert("You are far from a limited location to scan!");
+      return;
+    }
   };
 
   useEffect(() => {
     if (modelsLoaded && data?.getUserLogin && coords) {
-      // handleDetectFace();
       hanleCheckLocation();
     }
   }, [modelsLoaded, data?.getUserLogin, dataBranch?.getBranchById]);
@@ -299,7 +305,8 @@ function FaceDetectionPage() {
             </button>
         } */}
       </div>
-      {captureVideo ? (
+
+      {captureVideo && loading === false ? (
         // modelsLoaded ?
         //   <>
         <div className="video-container">
