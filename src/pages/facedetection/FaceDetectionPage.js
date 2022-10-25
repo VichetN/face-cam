@@ -237,6 +237,7 @@ function FaceDetectionPage() {
     }
   );
 
+  const [longDistand,setLongDistand] = useState(0);
   const hanleCheckLocation = () => {
     // console.log(coords)
     const distance = getDistance(
@@ -250,13 +251,14 @@ function FaceDetectionPage() {
     );
 
     console.log(distance);
-
+    setLongDistand(distance)
     if (distance < 100) {
       handleDetectFace();
-    } else {
-      alert("You are far from a limited location to scan!");
-      return;
-    }
+    } 
+    // else {
+    //   alert("You are far from a limited location to scan!");
+    //   return;
+    // }
   };
 
   useEffect(() => {
@@ -292,7 +294,7 @@ function FaceDetectionPage() {
       <div style={{ textAlign: "center", padding: "10px" }}>
         <h3>Detect your face</h3>
 
-        {loading && <div>You are far from a limited location to scan!</div>}
+        {loading && <div>You are stay {longDistand} meter far from a limited location to scan!</div>}
 
         {/* {
           captureVideo && modelsLoaded ?
