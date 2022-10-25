@@ -292,7 +292,7 @@ function FaceDetectionPage() {
       <div style={{ textAlign: "center", padding: "10px" }}>
         <h3>Detect your face</h3>
 
-        {loading && <div>loading...</div>}
+        {loading && <div>You are far from a limited location to scan!</div>}
 
         {/* {
           captureVideo && modelsLoaded ?
